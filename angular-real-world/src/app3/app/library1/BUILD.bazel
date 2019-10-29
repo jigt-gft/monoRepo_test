@@ -1,0 +1,36 @@
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+load("@npm_bazel_typescript//:defs.bzl", "ts_library")
+load("//src/tools:defaults.bzl", "ts_web_test_suite")
+
+package(default_visibility = ["//:__subpackages__"])
+
+# We don't import from these, but the generated ngfactory code will
+NG_FACTORY_ADDED_IMPORTS = [
+    "@npm//@angular/cdk",
+    "@npm//@angular/material",
+]
+
+ng_module(
+    name = "library1",
+    srcs = [
+        "library.component.ts",
+        "library.module.ts",
+    ],
+    tsconfig = "//src/app3:tsconfig.json",
+    deps = NG_FACTORY_ADDED_IMPORTS + [
+        "//src/app3/app/library3",
+        "//src/app3/shared/material",
+        "//src/app3/app/library2",
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+        "@npm//date-fns"
+    ],
+)
+
+# For testing from the root workspace of this repository with bazel_integration_test.
+filegroup(
+    name = "all_files",
+    srcs = glob(["**/*"]),
+)

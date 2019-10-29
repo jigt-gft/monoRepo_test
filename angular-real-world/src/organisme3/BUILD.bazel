@@ -1,0 +1,36 @@
+load("@io_bazel_rules_sass//:defs.bzl", "sass_binary")
+load("@npm_angular_bazel//:index.bzl", "ng_module")
+load("@npm_bazel_typescript//:defs.bzl", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+# We don't import from these, but the generated ngfactory code will
+NG_FACTORY_ADDED_IMPORTS = [
+    "@npm//@angular/cdk",
+    "@npm//@angular/material",
+]
+
+ng_module(
+    name = "organisme3",
+    srcs = [
+        "organisme3.component.ts",
+        "organisme3.module.ts",
+    ],
+     assets = [
+        "organisme3.component.html"
+    ],
+    tsconfig = "//angular-real-world/angular/src:tsconfig.json",
+    deps = NG_FACTORY_ADDED_IMPORTS + [
+        "@npm//@angular/core",
+        "@npm//@angular/forms",
+        "@npm//@angular/router",
+        "@npm//date-fns",
+        "//angular-real-world/angular/src/molecule2"
+    ],
+)
+
+# For testing from the root workspace of this repository with bazel_integration_test.
+filegroup(
+    name = "all_files",
+    srcs = glob(["**/*"]),
+)
